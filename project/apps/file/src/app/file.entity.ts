@@ -21,7 +21,10 @@ export class FileEntity implements File, Entity<string> {
     Object.assign(this, data);
   }
 
-  static fromObject(data: File): FileEntity {
-    return new FileEntity(data);
+  static fromObject(data: File & { _id?: unknown }): FileEntity {
+    const { _id, ...fileData } = data;
+    const entity = new FileEntity(fileData);
+    entity.id = _id !== undefined ? String(_id) : fileData.id;
+    return entity;
   }
 }

@@ -1,10 +1,23 @@
 import { Injectable } from '@nestjs/common';
-import { BaseMemoryRepository } from '@project/shared/core';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+
+import { BaseMongoRepository } from '@project/shared/core';
 import { LikeEntity } from './like.entity';
+import { LikeModel } from './like.model';
 
 @Injectable()
-export class LikeRepository extends BaseMemoryRepository<LikeEntity> {
+export class LikeRepository extends BaseMongoRepository<LikeEntity, LikeModel> {
+  constructor(
+    @InjectModel(LikeModel.name) likeModel: Model<LikeModel>
+  ) {
+    super(likeModel, LikeEntity.fromObject);
+  }
+
   public async findAll(): Promise<LikeEntity[]> {
-    return Array.from(this.entities.values());
+    const documents = await this.model.find().exec();
+    return documents.map(
+      (document) => this.createEntityFromDocument(document as LikeModel) as LikeEntity
+    );
   }
 }

@@ -34,7 +34,10 @@ export class BlogPostEntity implements Post, Entity<string> {
     Object.assign(this, data);
   }
 
-  static fromObject(data: Post): BlogPostEntity {
-    return new BlogPostEntity(data);
+  static fromObject(data: Post & { _id?: unknown }): BlogPostEntity {
+    const { _id, ...postData } = data;
+    const entity = new BlogPostEntity(postData);
+    entity.id = _id !== undefined ? String(_id) : postData.id;
+    return entity;
   }
 }

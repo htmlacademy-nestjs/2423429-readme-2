@@ -20,7 +20,10 @@ export class CommentEntity implements Comment, Entity<string> {
     Object.assign(this, data);
   }
 
-  static fromObject(data: Comment): CommentEntity {
-    return new CommentEntity(data);
+  static fromObject(data: Comment & { _id?: unknown }): CommentEntity {
+    const { _id, ...commentData } = data;
+    const entity = new CommentEntity(commentData);
+    entity.id = _id !== undefined ? String(_id) : commentData.id;
+    return entity;
   }
 }

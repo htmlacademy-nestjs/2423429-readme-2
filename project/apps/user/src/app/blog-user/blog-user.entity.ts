@@ -47,7 +47,10 @@ export class BlogUserEntity implements AuthUser, Entity<string> {
     return compare(password, this.passwordHash);
   }
 
-  static fromObject(data: AuthUser): BlogUserEntity {
-    return new BlogUserEntity(data);
+  static fromObject(data: AuthUser & { _id?: unknown }): BlogUserEntity {
+    const { _id, ...userData } = data;
+    const entity = new BlogUserEntity(userData);
+    entity.id = _id !== undefined ? String(_id) : userData.id;
+    return entity;
   }
 }

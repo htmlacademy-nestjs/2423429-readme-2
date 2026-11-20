@@ -1,0 +1,16 @@
+{
+  "name": "shared-config-user",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "shared/config/user/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["shared/config/user/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}

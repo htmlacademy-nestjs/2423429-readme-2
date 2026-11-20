@@ -19,7 +19,10 @@ export class LikeEntity implements Like, Entity<string> {
     Object.assign(this, data);
   }
 
-  static fromObject(data: Like): LikeEntity {
-    return new LikeEntity(data);
+  static fromObject(data: Like & { _id?: unknown }): LikeEntity {
+    const { _id, ...likeData } = data;
+    const entity = new LikeEntity(likeData);
+    entity.id = _id !== undefined ? String(_id) : likeData.id;
+    return entity;
   }
 }
